@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="de" class="dark">
+
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Meine Mathe-Tools{% endblock %}</title>
-  
+
   <!-- Tailwind CSS (dark mode) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -11,23 +12,25 @@
       darkMode: 'class',
     }
   </script>
-  
+
   <!-- KaTeX CSS and JS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-92B4aO9sxhZCR2XlK5spcN70xjnuFxDNrJzE1rXdXHJQXiz9A7UFZ9tS5NTcZlXD" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-PBo3gH8q+N6Lp1I+6hAi7E+EPC+Zn6AiK8aGwpBqtV3fZCbK1f6vCKm2rOkc6TRW" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-6eAC3AiouWbZ8mcaeLA4nYPqyRa7AdOC7usOx8pJFScqKzC5X/viIGUfbgGQ6VtO" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+    integrity="sha384-92B4aO9sxhZCR2XlK5spcN70xjnuFxDNrJzE1rXdXHJQXiz9A7UFZ9tS5NTcZlXD" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" ...></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" ...></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       renderMathInElement(document.body, {
         delimiters: [
-          {left: "\\(", right: "\\)", display: false},
-          {left: "\\[", right: "\\]", display: true},
-          {left: "$$", right: "$$", display: true}
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$$", right: "$$", display: true }
         ]
       });
     });
   </script>
 </head>
+
 <body class="bg-gray-900 text-gray-100">
   <nav class="bg-gray-800 shadow">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -44,4 +47,5 @@
     {% block content %}{% endblock %}
   </div>
 </body>
+
 </html>
