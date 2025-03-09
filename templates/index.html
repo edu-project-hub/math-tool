@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Startseite - Mathe-Tools{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Willkommen zu meinen Mathe-Tools</h1>
+<p class="mb-4">Wähle eine der folgenden Aufgaben aus:</p>
+<ul class="list-disc pl-5 space-y-2">
+  <li><a href="{{ url_for('tree') }}" class="text-blue-400 hover:underline">Wahrscheinlichkeitsbaum-Generator</a></li>
+  <li><a href="{{ url_for('binom') }}" class="text-blue-400 hover:underline">Binomialkoeffizient Rechner</a></li>
+  <li><a href="{{ url_for('factorial_calc') }}" class="text-blue-400 hover:underline">Fakultät Rechner</a></li>
+</ul>
+
+<!-- New section that recreates your combination/variation/permutation flowchart with real fraction lines via KaTeX -->
+<section class="mt-8 p-4 bg-gray-800 rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">Überblick: Kombination, Variation, Permutation</h2>
+
+  <!-- The "question" at the top -->
+  <p class="mb-2">Findet eine Auswahl statt?</p>
+
+  <div class="flex flex-col space-y-6">
+    <!-- Ja branch -->
+    <div>
+      <span class="inline-block bg-green-600 px-3 py-1 text-white rounded">Ja</span>
+      <div class="ml-6 mt-2">
+
+        <!-- Kombination -->
+        <div class="mb-4">
+          <span class="inline-block bg-blue-600 px-3 py-1 text-white rounded">Kombination</span>
+          <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+            <li>
+              Kombination ohne Wiederholung: 
+              <span class="text-blue-200">
+                {% raw %}
+                  \(\binom{n}{k} = \frac{n!}{k!(n-k)!}\)
+                {% endraw %}
+              </span>
+            </li>
+            <li>
+              Kombination mit Wiederholung: 
+              <span class="text-blue-200">
+                \(\binom{n + k - 1}{k} = \frac{(n + k - 1)!}{k!(n - 1)!}\)
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Variation -->
+        <div>
+          <span class="inline-block bg-green-600 px-3 py-1 text-white rounded">Variation</span>
+          <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+            <li>
+              Variation ohne Wiederholung: 
+              <span class="text-blue-200">
+                \(\frac{n!}{(n-k)!}\)
+              </span>
+            </li>
+            <li>
+              Variation mit Wiederholung: 
+              <span class="text-blue-200">
+                \(n^k\)
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nein branch -->
+    <div>
+      <span class="inline-block bg-red-600 px-3 py-1 text-white rounded">Nein</span>
+      <div class="ml-6 mt-2">
+        <span class="inline-block bg-orange-600 px-3 py-1 text-white rounded">Permutation</span>
+        <ul class="list-disc list-inside ml-6 mt-2">
+          <li>
+            Permutation ohne Wiederholung: 
+            <span class="text-blue-200">
+              \(n!\)
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Explanations of the variables -->
+  <div class="mt-6">
+    <h3 class="text-xl font-semibold mb-2">Erklärung der Variablen</h3>
+    <ul class="list-disc list-inside ml-6 space-y-1">
+      <li><strong>n:</strong> Gesamtzahl der Elemente</li>
+      <li><strong>k:</strong> Anzahl der auszuwählenden Elemente</li>
+      <li><strong>Wiederholung:</strong> Gibt an, ob Elemente mehrfach gewählt werden dürfen</li>
+    </ul>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Wahrscheinlichkeitsbaum Generator{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Wahrscheinlichkeitsbaum Generator</h1>
+<style>
+  /* CSS for delete button on hover for state rows */
+  .delete-state-btn {
+      visibility: hidden;
+  }
+  .state-row:hover .delete-state-btn {
+      visibility: visible;
+  }
+</style>
+<form method="post" class="space-y-6">
+    <!-- Checkbox: Alle Ereignisse identisch? -->
+    <div>
+      <label class="inline-flex items-center">
+        <input class="form-checkbox h-5 w-5 text-blue-600" type="checkbox" name="identical" value="yes" id="identicalCheck">
+        <span class="ml-2">Alle Ereignisse identisch?</span>
+      </label>
+    </div>
+    <input type="hidden" name="eventCount" id="eventCount" value="1">
+    <div id="eventsContainer">
+      <div class="bg-white dark:bg-gray-800 shadow rounded p-4 mb-4 event-card" id="event_0">
+        <div class="flex justify-between items-center mb-2">
+          <h5 class="text-lg font-bold event-header">Ereignis #1</h5>
+          <button type="button" class="text-red-500 hover:text-red-700 delete-event-btn" onclick="deleteEvent(0)" title="Ereignis löschen">🗑️</button>
+        </div>
+        <input type="hidden" name="stateCount_0" id="stateCount_0" value="1" class="state-count">
+        <div id="event_0_states" class="space-y-2 states-container">
+          <div class="flex items-center space-x-2 state-row" id="event_0_state_0">
+            <input type="text" class="flex-1 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_0_state_0_name" placeholder="Name" required>
+            <input type="number" step="any" class="w-32 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_0_state_0_value" placeholder="Wert" required>
+            <button type="button" class="text-red-500 hover:text-red-700 delete-state-btn" onclick="deleteState(0, 0)" title="Zustand löschen">🗑️</button>
+          </div>
+        </div>
+        <button type="button" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600" onclick="addState(0)">+ Zustand hinzufügen</button>
+      </div>
+    </div>
+    <button type="button" id="addEventBtn" class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600" onclick="addEvent()">+ Ereignis hinzufügen</button>
+    <hr class="my-4 border-gray-300 dark:border-gray-600">
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Baum generieren</button>
+</form>
+{% if svg_graph %}
+  <h2 class="text-2xl font-semibold mt-6">SVG-Darstellung</h2>
+  <div class="my-4 border border-gray-300 dark:border-gray-600 p-4 bg-white dark:bg-gray-800">
+    {{ svg_graph|safe }}
+  </div>
+  <h2 class="text-2xl font-semibold mt-6">Kombinationen</h2>
+  <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-700">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Kombination</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Wahrscheinlichkeit</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+      {% for combo, prob in combinations %}
+      <tr>
+        <td class="px-6 py-4 whitespace-nowrap">{{ combo }}</td>
+        <td class="px-6 py-4 whitespace-nowrap">{{ "%.4f"|format(prob) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+<script>
+function addEvent() {
+    if(document.getElementById("identicalCheck").checked) {
+         alert("Alle Ereignisse sind identisch. Es können keine zusätzlichen Ereignisse hinzugefügt werden.");
+         return;
+    }
+    const eventCountInput = document.getElementById("eventCount");
+    let eventCount = parseInt(eventCountInput.value);
+    const eventIndex = eventCount;
+    eventCount += 1;
+    eventCountInput.value = eventCount;
+    const newEventHTML = `
+      <div class="bg-white dark:bg-gray-800 shadow rounded p-4 mb-4 event-card" id="event_${eventIndex}">
+        <div class="flex justify-between items-center mb-2">
+          <h5 class="text-lg font-bold event-header">Ereignis #${eventIndex + 1}</h5>
+          <button type="button" class="text-red-500 hover:text-red-700 delete-event-btn" onclick="deleteEvent(${eventIndex})" title="Ereignis löschen">🗑️</button>
+        </div>
+        <input type="hidden" name="stateCount_${eventIndex}" id="stateCount_${eventIndex}" value="1" class="state-count">
+        <div id="event_${eventIndex}_states" class="space-y-2 states-container">
+          <div class="flex items-center space-x-2 state-row" id="event_${eventIndex}_state_0">
+            <input type="text" class="flex-1 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_${eventIndex}_state_0_name" placeholder="Name" required>
+            <input type="number" step="any" class="w-32 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_${eventIndex}_state_0_value" placeholder="Wert" required>
+            <button type="button" class="text-red-500 hover:text-red-700 delete-state-btn" onclick="deleteState(${eventIndex}, 0)" title="Zustand löschen">🗑️</button>
+          </div>
+        </div>
+        <button type="button" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600" onclick="addState(${eventIndex})">+ Zustand hinzufügen</button>
+      </div>
+    `;
+    const container = document.getElementById("eventsContainer");
+    container.insertAdjacentHTML("beforeend", newEventHTML);
+    reindexEvents();
+}
+
+function addState(eventIndex) {
+    const stateCountInput = document.getElementById(`stateCount_${eventIndex}`);
+    let stateCount = parseInt(stateCountInput.value);
+    const stateIndex = stateCount;
+    stateCount += 1;
+    stateCountInput.value = stateCount;
+    const newStateHTML = `
+      <div class="flex items-center space-x-2 state-row" id="event_${eventIndex}_state_${stateIndex}">
+        <input type="text" class="flex-1 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_${eventIndex}_state_${stateIndex}_name" placeholder="Name" required>
+        <input type="number" step="any" class="w-32 border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" name="event_${eventIndex}_state_${stateIndex}_value" placeholder="Wert" required>
+        <button type="button" class="text-red-500 hover:text-red-700 delete-state-btn" onclick="deleteState(${eventIndex}, ${stateIndex})" title="Zustand löschen">🗑️</button>
+      </div>
+    `;
+    const statesContainer = document.getElementById(`event_${eventIndex}_states`);
+    statesContainer.insertAdjacentHTML("beforeend", newStateHTML);
+    reindexStates(eventIndex);
+}
+
+function deleteEvent(eventIndex) {
+    if (!confirm("Bist du sicher, dass du dieses Ereignis löschen möchtest?")) {
+         return;
+    }
+    let eventCard = document.getElementById("event_" + eventIndex);
+    if (eventCard) {
+         eventCard.remove();
+         reindexEvents();
+    }
+}
+
+function deleteState(eventIndex, stateIndex) {
+    if (!confirm("Bist du sicher, dass du diesen Zustand löschen möchtest?")) {
+         return;
+    }
+    let stateRow = document.getElementById("event_" + eventIndex + "_state_" + stateIndex);
+    if (stateRow) {
+         stateRow.remove();
+         reindexStates(eventIndex);
+    }
+}
+
+function reindexEvents() {
+    let eventsContainer = document.getElementById("eventsContainer");
+    let eventCards = eventsContainer.querySelectorAll('.event-card');
+    eventCards.forEach(function(card, index) {
+         card.id = "event_" + index;
+         let header = card.querySelector('.event-header');
+         if(header) header.textContent = "Ereignis #" + (index + 1);
+         let stateCountInput = card.querySelector('.state-count');
+         if(stateCountInput) {
+             stateCountInput.id = "stateCount_" + index;
+             stateCountInput.name = "stateCount_" + index;
+         }
+         let statesContainer = card.querySelector('.states-container');
+         if(statesContainer) {
+             statesContainer.id = "event_" + index + "_states";
+             reindexStates(index);
+         }
+         let deleteButton = card.querySelector('.delete-event-btn');
+         if(deleteButton) {
+             deleteButton.setAttribute("onclick", "deleteEvent(" + index + ")");
+         }
+    });
+    document.getElementById("eventCount").value = eventCards.length;
+}
+
+function reindexStates(eventIndex) {
+    let statesContainer = document.getElementById("event_" + eventIndex + "_states");
+    let stateRows = statesContainer.querySelectorAll('.state-row');
+    stateRows.forEach(function(row, index) {
+         row.id = "event_" + eventIndex + "_state_" + index;
+         let inputs = row.querySelectorAll('input');
+         if(inputs.length >= 2) {
+             inputs[0].name = "event_" + eventIndex + "_state_" + index + "_name";
+             inputs[1].name = "event_" + eventIndex + "_state_" + index + "_value";
+         }
+         let deleteStateButton = row.querySelector('.delete-state-btn');
+         if(deleteStateButton) {
+             deleteStateButton.setAttribute("onclick", "deleteState(" + eventIndex + ", " + index + ")");
+         }
+    });
+    let stateCountInput = document.getElementById("stateCount_" + eventIndex);
+    if(stateCountInput) {
+         stateCountInput.value = stateRows.length;
+    }
+}
+
+document.getElementById("identicalCheck").addEventListener("change", function() {
+    let eventsContainer = document.getElementById("eventsContainer");
+    let eventCards = eventsContainer.querySelectorAll('.event-card');
+    if(this.checked) {
+         // Only show the first event card
+         eventCards.forEach(function(card, index) {
+              if(index > 0) {
+                   card.style.display = "none";
+              }
+         });
+         document.getElementById("addEventBtn").disabled = true;
+    } else {
+         eventCards.forEach(function(card, index) {
+              card.style.display = "";
+         });
+         document.getElementById("addEventBtn").disabled = false;
+    }
+});
+</script>
+{% endblock %}

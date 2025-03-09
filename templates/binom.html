@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Binomialkoeffizient Rechner{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Binomialkoeffizient Rechner</h1>
+<form method="post" class="space-y-4">
+  <div>
+    <label for="n" class="block text-sm font-medium">n (Gesamtzahl)</label>
+    <input type="number" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700" id="n" name="n" value="{{ n }}" required>
+  </div>
+  <div>
+    <label for="k" class="block text-sm font-medium">k (Auswahlzahl)</label>
+    <input type="number" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700" id="k" name="k" value="{{ k }}" required>
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
+</form>
+{% if result is not none %}
+  <h2 class="text-xl font-semibold mt-6">Ergebnis</h2>
+  <p>{{ result }}</p>
+{% endif %}
+{% endblock %}
