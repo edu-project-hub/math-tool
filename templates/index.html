@@ -1,7 +1,7 @@
 {% extends "base.html" %}
+{% import "partials/_modal.html" as modal %}
 {% block title %}Mathe-Tools{% endblock %}
 {% block content %}
-
 <section class="mt-8 p-4 bg-gray-800 rounded shadow">
   <h2 class="text-2xl font-bold mb-4">Kombinatorische Formeln</h2>
   <p class="mb-2">Findet eine Auswahl statt?</p>
@@ -9,7 +9,7 @@
     <div>
       <span class="inline-block bg-green-600 px-3 py-1 text-white rounded">Ja</span>
       <div class="ml-6 mt-2">
-         Kombination -->
+        <!-- Kombination -->
         <div class="mb-4">
           <span class="inline-block bg-blue-600 px-3 py-1 text-white rounded">Kombination</span>
           <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
@@ -27,7 +27,7 @@
             </li>
           </ul>
         </div>
-        <!-- Varition -->
+        <!-- Variation -->
         <div>
           <span class="inline-block bg-green-600 px-3 py-1 text-white rounded">Variation</span>
           <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
@@ -72,277 +72,113 @@
   </div>
 </section>
 
-<!-- Modal templates -->
-<div id="kombOhneModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Kombination ohne Wiederholung</h3>
-      <button onclick="closeModal('kombOhneModal')" class="text-gray-400 hover:text-gray-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="mb-4">
-      <p class="mb-2">Formel: {{ "\\(\\binom{n}{k} = \\frac{n!}{k!(n-k)!}\\)" | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">Diese Formel berechnet die Anzahl der Möglichkeiten, k Elemente aus n Elementen auszuwählen, <strong>ohne Berücksichtigung der Reihenfolge</strong> und ohne Wiederholung.</p>
-      <div class="bg-gray-700 p-3 rounded mt-2 mb-2">
-        <p class="text-sm text-blue-200 font-medium">Wichtig: Bei einer Kombination spielt die Reihenfolge keine Rolle.</p>
-        <p class="text-sm text-gray-300">Beispiel: Die Lottozahlen 6, 12, 18 ist dieselbe Kombination wie 12, 18, 6.</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label for="kombOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label>
-        <input type="number" id="kombOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <div>
-        <label for="kombOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label>
-        <input type="number" id="kombOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <button onclick="calculateKombOhne()" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
-      <div id="kombOhne_result" class="mt-4 p-3 bg-gray-700 rounded hidden">
-        <p id="kombOhne_result_value"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="kombMitModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Kombination mit Wiederholung</h3>
-      <button onclick="closeModal('kombMitModal')" class="text-gray-400 hover:text-gray-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="mb-4">
-      <p class="mb-2">Formel: {{ "\\(\\binom{n + k - 1}{k} = \\frac{(n + k - 1)!}{k!(n - 1)!}\\)" | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">Diese Formel berechnet die Anzahl der Möglichkeiten, k Elemente aus n Elementen auszuwählen, <strong>ohne Berücksichtigung der Reihenfolge</strong> und mit Wiederholung (dasselbe Element kann mehrfach gewählt werden).</p>
-      <div class="bg-gray-700 p-3 rounded mt-2 mb-2">
-        <p class="text-sm text-blue-200 font-medium">Wichtig: Bei einer Kombination spielt die Reihenfolge keine Rolle.</p>
-        <p class="text-sm text-gray-300">Beispiel: In einer Eisdiele 3 Kugeln Eis aus 5 Sorten auswählen, wobei man dieselbe Sorte mehrfach wählen darf.</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label for="kombMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label>
-        <input type="number" id="kombMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <div>
-        <label for="kombMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label>
-        <input type="number" id="kombMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <button onclick="calculateKombMit()" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
-      <div id="kombMit_result" class="mt-4 p-3 bg-gray-700 rounded hidden">
-        <p id="kombMit_result_value"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="varOhneModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Variation ohne Wiederholung</h3>
-      <button onclick="closeModal('varOhneModal')" class="text-gray-400 hover:text-gray-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="mb-4">
-      <p class="mb-2">Formel: {{ "\\(\\frac{n!}{(n-k)!}\\)" | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">Diese Formel berechnet die Anzahl der Möglichkeiten, k Elemente aus n Elementen auszuwählen, <strong>mit Berücksichtigung der Reihenfolge</strong> und ohne Wiederholung.</p>
-      <div class="bg-gray-700 p-3 rounded mt-2 mb-2">
-        <p class="text-sm text-blue-200 font-medium">Wichtig: Bei einer Variation ist die Reihenfolge entscheidend.</p>
-        <p class="text-sm text-gray-300">Beispiel: Die PIN 1234 ist eine andere Variation als 4321, obwohl dieselben Ziffern verwendet werden.</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label for="varOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label>
-        <input type="number" id="varOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <div>
-        <label for="varOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label>
-        <input type="number" id="varOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <button onclick="calculateVarOhne()" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
-      <div id="varOhne_result" class="mt-4 p-3 bg-gray-700 rounded hidden">
-        <p id="varOhne_result_value"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="varMitModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Variation mit Wiederholung</h3>
-      <button onclick="closeModal('varMitModal')" class="text-gray-400 hover:text-gray-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="mb-4">
-      <p class="mb-2">Formel: {{ "\\(n^k\\)" | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">Diese Formel berechnet die Anzahl der Möglichkeiten, k Elemente aus n Elementen auszuwählen, <strong>mit Berücksichtigung der Reihenfolge</strong> und mit Wiederholung (dasselbe Element kann mehrfach gewählt werden).</p>
-      <div class="bg-gray-700 p-3 rounded mt-2 mb-2">
-        <p class="text-sm text-blue-200 font-medium">Wichtig: Bei einer Variation ist die Reihenfolge entscheidend.</p>
-        <p class="text-sm text-gray-300">Beispiel: Erstellen eines Passworts mit 4 Zeichen aus einem Alphabet mit 26 Buchstaben, wobei Buchstaben mehrfach verwendet werden dürfen.</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label for="varMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label>
-        <input type="number" id="varMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <div>
-        <label for="varMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label>
-        <input type="number" id="varMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <button onclick="calculateVarMit()" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
-      <div id="varMit_result" class="mt-4 p-3 bg-gray-700 rounded hidden">
-        <p id="varMit_result_value"></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="permOhneModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-bold">Permutation ohne Wiederholung</h3>
-      <button onclick="closeModal('permOhneModal')" class="text-gray-400 hover:text-gray-200 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-    <div class="mb-4">
-      <p class="mb-2">Formel: {{ "\\(n!\\)" | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">Diese Formel berechnet die Anzahl der Möglichkeiten, alle n Elemente in unterschiedlichen Reihenfolgen anzuordnen.</p>
-      <div class="bg-gray-700 p-3 rounded mt-2 mb-2">
-        <p class="text-sm text-blue-200 font-medium">Wichtig: Bei einer Permutation werden alle vorhandenen Elemente in unterschiedlichen Reihenfolgen angeordnet.</p>
-        <p class="text-sm text-gray-300">Beispiel: Die Anzahl der möglichen Anordnungen von n verschiedenen Personen in einer Reihe.</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div>
-        <label for="permOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label>
-        <input type="number" id="permOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0">
-      </div>
-      <button onclick="calculatePermOhne()" class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Berechnen</button>
-      <div id="permOhne_result" class="mt-4 p-3 bg-gray-700 rounded hidden">
-        <p id="permOhne_result_value"></p>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Include the modals partial -->
+{% include "partials/modals.html" %}
 
 <script>
-  // Modal functions
+  // Utility functions
+  function factorial(n) {
+    if (n < 0) return NaN;
+    let res = 1;
+    for (let i = 2; i <= n; i++) {
+      res *= i;
+    }
+    return res;
+  }
+
+  function binomCoeff(n, k) {
+    if (k < 0 || n < 0 || k > n) return NaN;
+    return factorial(n) / (factorial(k) * factorial(n - k));
+  }
+
+  function variationOhne(n, k) {
+    if (n < 0 || k < 0 || k > n) return NaN;
+    return factorial(n) / factorial(n - k);
+  }
+
+  function variationMit(n, k) {
+    if (n < 0 || k < 0) return NaN;
+    return Math.pow(n, k);
+  }
+
+  // Calculation functions
+  function calculateKombOhne() {
+    const nVal = parseInt(document.getElementById('kombOhne_n').value);
+    const kVal = parseInt(document.getElementById('kombOhne_k').value);
+    let result;
+    if (isNaN(nVal) || isNaN(kVal) || nVal < kVal) {
+      result = "Ungültige Eingabe.";
+    } else {
+      result = binomCoeff(nVal, kVal);
+    }
+    document.getElementById('kombOhneModal_result_value').textContent = "Ergebnis: " + result;
+    document.getElementById('kombOhneModal_result').classList.remove('hidden');
+  }
+
+  function calculateKombMit() {
+    const nVal = parseInt(document.getElementById('kombMit_n').value);
+    const kVal = parseInt(document.getElementById('kombMit_k').value);
+    let result;
+    if (isNaN(nVal) || isNaN(kVal) || nVal <= 0) {
+      result = "Ungültige Eingabe.";
+    } else {
+      result = binomCoeff(nVal + kVal - 1, kVal);
+    }
+    document.getElementById('kombMitModal_result_value').textContent = "Ergebnis: " + result;
+    document.getElementById('kombMitModal_result').classList.remove('hidden');
+  }
+
+  function calculateVarOhne() {
+    const nVal = parseInt(document.getElementById('varOhne_n').value);
+    const kVal = parseInt(document.getElementById('varOhne_k').value);
+    let result;
+    if (isNaN(nVal) || isNaN(kVal) || nVal < kVal) {
+      result = "Ungültige Eingabe.";
+    } else {
+      result = variationOhne(nVal, kVal);
+    }
+    document.getElementById('varOhneModal_result_value').textContent = "Ergebnis: " + result;
+    document.getElementById('varOhneModal_result').classList.remove('hidden');
+  }
+
+  function calculateVarMit() {
+    const nVal = parseInt(document.getElementById('varMit_n').value);
+    const kVal = parseInt(document.getElementById('varMit_k').value);
+    let result;
+    if (isNaN(nVal) || isNaN(kVal)) {
+      result = "Ungültige Eingabe.";
+    } else {
+      result = variationMit(nVal, kVal);
+    }
+    document.getElementById('varMitModal_result_value').textContent = "Ergebnis: " + result;
+    document.getElementById('varMitModal_result').classList.remove('hidden');
+  }
+
+  function calculatePermOhne() {
+    const nVal = parseInt(document.getElementById('permOhne_n').value);
+    let result;
+    if (isNaN(nVal)) {
+      result = "Ungültige Eingabe.";
+    } else {
+      result = factorial(nVal);
+    }
+    document.getElementById('permOhneModal_result_value').textContent = "Ergebnis: " + result;
+    document.getElementById('permOhneModal_result').classList.remove('hidden');
+  }
+
+  // Modal open/close functions
   function openModal(modalId) {
     document.getElementById(modalId).classList.remove('hidden');
   }
-  
   function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
   }
-  
-  // Factorial function
-  function factorial(n) {
-    if (n < 0) return null;
-    if (n <= 1) return 1;
-    let result = 1;
-    for (let i = 2; i <= n; i++) {
-      result *= i;
-    }
-    return result;
-  }
-  
-  // Binomial coefficient function
-  function binomCoeff(n, k) {
-    if (k < 0 || n < 0 || k > n) return null;
-    return Math.round(factorial(n) / (factorial(k) * factorial(n - k)));
-  }
-  
-  // Calculator functions
-  function calculateKombOhne() {
-    const n = parseInt(document.getElementById('kombOhne_n').value);
-    const k = parseInt(document.getElementById('kombOhne_k').value);
-    
-    if (isNaN(n) || isNaN(k) || n < 0 || k < 0 || k > n) {
-      document.getElementById('kombOhne_result_value').textContent = 'Ungültige Eingabe. Bitte überprüfen Sie, dass n ≥ k ≥ 0.';
-    } else {
-      const result = binomCoeff(n, k);
-      document.getElementById('kombOhne_result_value').textContent = `Ergebnis: ${result}`;
-    }
-    document.getElementById('kombOhne_result').classList.remove('hidden');
-  }
-  
-  function calculateKombMit() {
-    const n = parseInt(document.getElementById('kombMit_n').value);
-    const k = parseInt(document.getElementById('kombMit_k').value);
-    
-    if (isNaN(n) || isNaN(k) || n <= 0 || k < 0) {
-      document.getElementById('kombMit_result_value').textContent = 'Ungültige Eingabe. Bitte überprüfen Sie, dass n > 0 und k ≥ 0.';
-    } else {
-      const result = binomCoeff(n + k - 1, k);
-      document.getElementById('kombMit_result_value').textContent = `Ergebnis: ${result}`;
-    }
-    document.getElementById('kombMit_result').classList.remove('hidden');
-  }
-  
-  function calculateVarOhne() {
-    const n = parseInt(document.getElementById('varOhne_n').value);
-    const k = parseInt(document.getElementById('varOhne_k').value);
-    
-    if (isNaN(n) || isNaN(k) || n < 0 || k < 0 || k > n) {
-      document.getElementById('varOhne_result_value').textContent = 'Ungültige Eingabe. Bitte überprüfen Sie, dass n ≥ k ≥ 0.';
-    } else {
-      // n! / (n-k)!
-      const result = factorial(n) / factorial(n - k);
-      document.getElementById('varOhne_result_value').textContent = `Ergebnis: ${result}`;
-    }
-    document.getElementById('varOhne_result').classList.remove('hidden');
-  }
-  
-  function calculateVarMit() {
-    const n = parseInt(document.getElementById('varMit_n').value);
-    const k = parseInt(document.getElementById('varMit_k').value);
-    
-    if (isNaN(n) || isNaN(k) || n <= 0 || k < 0) {
-      document.getElementById('varMit_result_value').textContent = 'Ungültige Eingabe. Bitte überprüfen Sie, dass n > 0 und k ≥ 0.';
-    } else {
-      // n^k
-      const result = Math.pow(n, k);
-      document.getElementById('varMit_result_value').textContent = `Ergebnis: ${result}`;
-    }
-    document.getElementById('varMit_result').classList.remove('hidden');
-  }
-  
-  function calculatePermOhne() {
-    const n = parseInt(document.getElementById('permOhne_n').value);
-    
-    if (isNaN(n) || n < 0) {
-      document.getElementById('permOhne_result_value').textContent = 'Ungültige Eingabe. Bitte überprüfen Sie, dass n ≥ 0.';
-    } else {
-      const result = factorial(n);
-      document.getElementById('permOhne_result_value').textContent = `Ergebnis: ${result}`;
-    }
-    document.getElementById('permOhne_result').classList.remove('hidden');
-  }
-  
+
   // Close modals when clicking outside
   window.onclick = function(event) {
     const modals = document.querySelectorAll('[id$="Modal"]');
     modals.forEach(modal => {
-      if (event.target == modal) {
+      if (event.target === modal) {
         closeModal(modal.id);
       }
     });

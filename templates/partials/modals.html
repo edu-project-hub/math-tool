@@ -1,0 +1,46 @@
+{% import "partials/_modal.html" as modal %}
+
+{{ modal.render_modal(
+    "kombOhneModal",
+    "Kombination ohne Wiederholung",
+    "\\(\\binom{n}{k} = \\frac{n!}{k!(n-k)!}\\)",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n ohne Wiederholung auszuwählen.",
+    '<div><label for="kombOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="kombOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="kombOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="kombOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
+    "calculateKombOhne()"
+) }}
+
+{{ modal.render_modal(
+    "kombMitModal",
+    "Kombination mit Wiederholung",
+    "\\(\\binom{n + k - 1}{k} = \\frac{(n + k - 1)!}{k!(n - 1)!}\\)",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n mit Wiederholung auszuwählen.",
+    '<div><label for="kombMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="kombMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="kombMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="kombMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
+    "calculateKombMit()"
+) }}
+
+{{ modal.render_modal(
+    "varOhneModal",
+    "Variation ohne Wiederholung",
+    "\\(\\frac{n!}{(n-k)!}\\)",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n ohne Wiederholung (bei Beachtung der Reihenfolge) auszuwählen.",
+    '<div><label for="varOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="varOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="varOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="varOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
+    "calculateVarOhne()"
+) }}
+
+{{ modal.render_modal(
+    "varMitModal",
+    "Variation mit Wiederholung",
+    "\\(n^k\\)",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n mit Wiederholung (bei Beachtung der Reihenfolge) auszuwählen.",
+    '<div><label for="varMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="varMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="varMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="varMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
+    "calculateVarMit()"
+) }}
+
+{{ modal.render_modal(
+    "permOhneModal",
+    "Permutation ohne Wiederholung",
+    "\\(n!\\)",
+    "Berechnet die Anzahl der Möglichkeiten, n Elemente in unterschiedlichen Reihenfolgen anzuordnen.",
+    '<div><label for="permOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="permOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
+    "calculatePermOhne()"
+) }}
