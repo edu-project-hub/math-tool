@@ -4,7 +4,7 @@
     "kombOhneModal",
     "Kombination ohne Wiederholung",
     "\\(\\binom{n}{k} = \\frac{n!}{k!(n-k)!}\\)",
-    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n ohne Wiederholung auszuwählen.",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n auszuwählen, ohne dass Elemente mehrfach verwendet werden.<br><br><div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wichtig:</p><p class='text-sm text-gray-300'>Bei einer Kombination spielt die Reihenfolge keine Rolle. Beispiel: Die Lottozahlen 6, 12, 18 sind dieselbe Kombination wie 12, 18, 6.</p></div>",
     '<div><label for="kombOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="kombOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="kombOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="kombOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
     "calculateKombOhne()"
 ) }}
@@ -12,8 +12,8 @@
 {{ modal.render_modal(
     "kombMitModal",
     "Kombination mit Wiederholung",
-    "\\(\\binom{n + k - 1}{k} = \\frac{(n + k - 1)!}{k!(n - 1)!}\\)",
-    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n mit Wiederholung auszuwählen.",
+    "\\(\\binom{n+k-1}{k} = \\frac{(n+k-1)!}{k!(n-1)!}\\)",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n auszuwählen, wenn Wiederholungen erlaubt sind.<br><br><div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wichtig:</p><p class='text-sm text-gray-300'>Bei einer Kombination mit Wiederholung spielt die Reihenfolge ebenfalls keine Rolle. Beispiel: In einer Eisdiele kann man 3 Kugeln aus 5 Sorten wählen, wobei man dieselbe Sorte mehrfach wählt.</p></div>",
     '<div><label for="kombMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="kombMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="kombMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="kombMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
     "calculateKombMit()"
 ) }}
@@ -22,7 +22,7 @@
     "varOhneModal",
     "Variation ohne Wiederholung",
     "\\(\\frac{n!}{(n-k)!}\\)",
-    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n ohne Wiederholung (bei Beachtung der Reihenfolge) auszuwählen.",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n auszuwählen, wobei die Reihenfolge beachtet wird und Wiederholungen nicht erlaubt sind.<br><br><div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wichtig:</p><p class='text-sm text-gray-300'>Bei einer Variation ist die Reihenfolge entscheidend. Beispiel: Die PIN 1234 ist eine andere Variation als 4321, auch wenn dieselben Ziffern verwendet werden.</p></div>",
     '<div><label for="varOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="varOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="varOhne_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="varOhne_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
     "calculateVarOhne()"
 ) }}
@@ -31,7 +31,7 @@
     "varMitModal",
     "Variation mit Wiederholung",
     "\\(n^k\\)",
-    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n mit Wiederholung (bei Beachtung der Reihenfolge) auszuwählen.",
+    "Berechnet die Anzahl der Möglichkeiten, k Elemente aus n auszuwählen, wenn Wiederholungen erlaubt sind und die Reihenfolge beachtet wird.<br><br><div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wichtig:</p><p class='text-sm text-gray-300'>Auch hier ist die Reihenfolge entscheidend. Beispiel: Ein Passwort wie 1212 unterscheidet sich von 2121.</p></div>",
     '<div><label for="varMit_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="varMit_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div><div><label for="varMit_k" class="block text-sm font-medium">k (Auswahlzahl)</label><input type="number" id="varMit_k" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
     "calculateVarMit()"
 ) }}
@@ -40,7 +40,16 @@
     "permOhneModal",
     "Permutation ohne Wiederholung",
     "\\(n!\\)",
-    "Berechnet die Anzahl der Möglichkeiten, n Elemente in unterschiedlichen Reihenfolgen anzuordnen.",
+    "Berechnet die Anzahl der Möglichkeiten, n Elemente in unterschiedlichen Reihenfolgen anzuordnen.<br><br><div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wichtig:</p><p class='text-sm text-gray-300'>Bei einer Permutation werden alle Elemente in unterschiedlichen Reihenfolgen angeordnet. Beispiel: Die Anordnung von n verschiedenen Personen in einer Reihe.</p></div>",
     '<div><label for="permOhne_n" class="block text-sm font-medium">n (Gesamtzahl)</label><input type="number" id="permOhne_n" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" min="0"></div>',
     "calculatePermOhne()"
+) }}
+
+{{ modal.render_modal(
+    "combinedOddsModal",
+    "Kombinierte Wahrscheinlichkeit",
+    "",
+    "<div class='bg-gray-700 p-3 rounded mt-2 mb-2'><p class='text-sm text-blue-200 font-medium'>Wie es funktioniert:</p><p class='text-sm text-gray-300'><b>Kombination</b>: Einfaches Produkt<br><b>Variation</b>: Produkt * 2</p></div>",
+    '<div id="combinedOddsInputs"><div class="mb-2"><input type="number" step="any" min="0" max="1" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" placeholder="Wahrscheinlichkeit 1"></div></div><button type="button" onclick="addProbabilityInput()" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 mb-2">Weitere Wahrscheinlichkeit hinzufügen</button><div class="mb-2"><label class="block text-sm font-medium">Berechnungsmethode:</label><div class="flex space-x-4"><label><input type="radio" name="oddsMethod" value="kombination" checked> Kombination</label><label><input type="radio" name="oddsMethod" value="variation"> Variation</label></div></div>',
+    "calculateCombinedOdds()"
 ) }}

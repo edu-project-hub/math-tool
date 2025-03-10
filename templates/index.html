@@ -70,6 +70,13 @@
       <li><strong>Wiederholung:</strong> Gibt an, ob Elemente mehrfach gewählt werden dürfen</li>
     </ul>
   </div>
+  <div class="mt-8">
+    <div class="mt-2">
+      <button type="button" onclick="openModal('combinedOddsModal')" class="text-blue-400 hover:underline">
+        Kombinierte Wahrscheinlichkeit berechnen
+      </button>
+    </div>
+  </div>
 </section>
 
 <!-- Include the modals partial -->
@@ -85,23 +92,20 @@
     }
     return res;
   }
-
   function binomCoeff(n, k) {
     if (k < 0 || n < 0 || k > n) return NaN;
     return factorial(n) / (factorial(k) * factorial(n - k));
   }
-
   function variationOhne(n, k) {
     if (n < 0 || k < 0 || k > n) return NaN;
     return factorial(n) / factorial(n - k);
   }
-
   function variationMit(n, k) {
     if (n < 0 || k < 0) return NaN;
     return Math.pow(n, k);
   }
 
-  // Calculation functions
+  // Calculation functions for existing modals
   function calculateKombOhne() {
     const nVal = parseInt(document.getElementById('kombOhne_n').value);
     const kVal = parseInt(document.getElementById('kombOhne_k').value);
@@ -114,7 +118,6 @@
     document.getElementById('kombOhneModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('kombOhneModal_result').classList.remove('hidden');
   }
-
   function calculateKombMit() {
     const nVal = parseInt(document.getElementById('kombMit_n').value);
     const kVal = parseInt(document.getElementById('kombMit_k').value);
@@ -127,7 +130,6 @@
     document.getElementById('kombMitModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('kombMitModal_result').classList.remove('hidden');
   }
-
   function calculateVarOhne() {
     const nVal = parseInt(document.getElementById('varOhne_n').value);
     const kVal = parseInt(document.getElementById('varOhne_k').value);
@@ -140,7 +142,6 @@
     document.getElementById('varOhneModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('varOhneModal_result').classList.remove('hidden');
   }
-
   function calculateVarMit() {
     const nVal = parseInt(document.getElementById('varMit_n').value);
     const kVal = parseInt(document.getElementById('varMit_k').value);
@@ -153,7 +154,6 @@
     document.getElementById('varMitModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('varMitModal_result').classList.remove('hidden');
   }
-
   function calculatePermOhne() {
     const nVal = parseInt(document.getElementById('permOhne_n').value);
     let result;
@@ -166,6 +166,40 @@
     document.getElementById('permOhneModal_result').classList.remove('hidden');
   }
 
+  function addProbabilityInput() {
+    let container = document.getElementById('combinedOddsInputs');
+    let inputCount = container.children.length + 1;
+    let newInput = document.createElement('div');
+    newInput.className = 'mb-2';
+    newInput.innerHTML = `<input type="number" step="any" min="0" max="1" class="mt-1 block w-full border border-gray-600 rounded-md bg-gray-700 px-3 py-2" placeholder="Wahrscheinlichkeit ${inputCount}">`;
+    container.appendChild(newInput);
+  }
+
+  function calculateCombinedOdds() {
+    let container = document.getElementById('combinedOddsInputs');
+    let inputs = container.getElementsByTagName('input');
+    let product = 1;
+    for (let input of inputs) {
+      let value = parseFloat(input.value);
+      if (isNaN(value) || value < 0 || value > 1) {
+        document.getElementById('combinedOddsModal_result_value').textContent = "Ungültige Eingabe.";
+        document.getElementById('combinedOddsModal_result').classList.remove('hidden');
+        return;
+      }
+      product *= value;
+    }
+    let method = document.querySelector('input[name="oddsMethod"]:checked').value;
+    let result;
+    if (method === "variation") {
+      let n = inputs.length;
+      result = factorial(n) * product;
+    } else { 
+      result = product;
+    }
+    document.getElementById('combinedOddsModal_result_value').textContent = "Ergebnis: " + result.toFixed(4);
+    document.getElementById('combinedOddsModal_result').classList.remove('hidden');
+  }
+
   // Modal open/close functions
   function openModal(modalId) {
     document.getElementById(modalId).classList.remove('hidden');
@@ -173,7 +207,6 @@
   function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
   }
-
   // Close modals when clicking outside
   window.onclick = function(event) {
     const modals = document.querySelectorAll('[id$="Modal"]');

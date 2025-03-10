@@ -11,7 +11,7 @@
     </div>
     <div class="mb-4">
       <p class="mb-2">Formel: {{ formula | safe }}</p>
-      <p class="text-sm text-gray-300 mb-2">{{ description }}</p>
+      <p class="text-sm text-gray-300 mb-2">{{ description | safe }}</p>
     </div>
     <div class="space-y-4">
       {{ input_html | safe }}

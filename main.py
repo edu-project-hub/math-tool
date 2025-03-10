@@ -6,10 +6,8 @@ def create_app():
     # Register Blueprints
     from blueprints.tree import tree_bp
     from blueprints.math import math_bp
-    from blueprints.dice import dice_bp
     app.register_blueprint(tree_bp)
     app.register_blueprint(math_bp)
-    app.register_blueprint(dice_bp)
 
     @app.route("/")
     def index():
