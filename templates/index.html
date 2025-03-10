@@ -1,17 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Startseite - Mathe-Tools{% endblock %}
+{% block title %}Mathe-Tools{% endblock %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-4">Willkommen zu meinen Mathe-Tools</h1>
-<p class="mb-4">Wähle eine der folgenden Aufgaben aus:</p>
-<ul class="list-disc pl-5 space-y-2">
-  <li><a href="{{ url_for('tree') }}" class="text-blue-400 hover:underline">Wahrscheinlichkeitsbaum-Generator</a></li>
-  <li><a href="{{ url_for('binom') }}" class="text-blue-400 hover:underline">Binomialkoeffizient Rechner</a></li>
-  <li><a href="{{ url_for('factorial_calc') }}" class="text-blue-400 hover:underline">Fakultät Rechner</a></li>
-</ul>
+<h1 class="text-3xl font-bold mb-4">Mathe-Tools</h1>
 
 <!-- New section: Kombination, Variation, Permutation -->
 <section class="mt-8 p-4 bg-gray-800 rounded shadow">
-  <h2 class="text-2xl font-bold mb-4">Überblick: Kombination, Variation, Permutation</h2>
+  <h2 class="text-2xl font-bold mb-4">Kombinatorische Formeln</h2>
   <p class="mb-2">Findet eine Auswahl statt?</p>
   <div class="flex flex-col space-y-6">
     <!-- Ja branch -->
@@ -64,7 +58,7 @@
   </div>
   <!-- Erklärung -->
   <div class="mt-6">
-    <h3 class="text-xl font-semibold mb-2">Erklärung der Variablen</h3>
+    <h3 class="text-xl font-semibold mb-2">Variablen</h3>
     <ul class="list-disc list-inside ml-6 space-y-1">
       <li><strong>n:</strong> Gesamtzahl der Elemente</li>
       <li><strong>k:</strong> Anzahl der auszuwählenden Elemente</li>

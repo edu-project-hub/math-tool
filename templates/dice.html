@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Würfel Wahrscheinlichkeiten Rechner{% endblock %}
+{% block title %}Würfelwahrscheinlichkeit{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Würfel Wahrscheinlichkeiten Rechner</h1>
+<h1 class="text-2xl font-bold mb-4">Würfelwahrscheinlichkeit</h1>
 <form method="post" class="space-y-4">
   <div>
     <label for="n" class="block text-sm font-medium">Anzahl Würfe (n)</label>
     <input type="number" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700" id="n" name="n" value="{{ n }}" required>
   </div>
   <div>
-    <label for="k" class="block text-sm font-medium">Anzahl gewünschte Erfolge (z.B. Anzahl der 6en) (k)</label>
+    <label for="k" class="block text-sm font-medium">Anzahl gewünschte Erfolge (k)</label>
     <input type="number" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700" id="k" name="k" value="{{ k }}" required>
   </div>
   <div>

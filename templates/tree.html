@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Wahrscheinlichkeitsbaum Generator{% endblock %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-4">Wahrscheinlichkeitsbaum Generator</h1>
+<h1 class="text-3xl font-bold mb-4">Wahrscheinlichkeitsbaum</h1>
 <style>
   /* CSS for delete button on hover for state rows */
   .delete-state-btn {
@@ -42,7 +42,7 @@
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Baum generieren</button>
 </form>
 {% if svg_graph %}
-  <h2 class="text-2xl font-semibold mt-6">SVG-Darstellung</h2>
+  <h2 class="text-2xl font-semibold mt-6">Ergebnis</h2>
   <div class="my-4 border border-gray-300 dark:border-gray-600 p-4 bg-white dark:bg-gray-800">
     {{ svg_graph|safe }}
   </div>
