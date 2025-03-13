@@ -125,6 +125,7 @@
     }
     document.getElementById('kombOhneModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('kombOhneModal_result').classList.remove('hidden');
+    showConfidenceMeter('kombOhneModal', nVal, kVal, result);
   }
   function calculateKombMit() {
     const nVal = parseInt(document.getElementById('kombMit_n').value);
@@ -137,6 +138,7 @@
     }
     document.getElementById('kombMitModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('kombMitModal_result').classList.remove('hidden');
+    showConfidenceMeter('kombMitModal', nVal, kVal, result);
   }
   function calculateVarOhne() {
     const nVal = parseInt(document.getElementById('varOhne_n').value);
@@ -149,6 +151,7 @@
     }
     document.getElementById('varOhneModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('varOhneModal_result').classList.remove('hidden');
+    showConfidenceMeter('varOhneModal', nVal, kVal, result);
   }
   function calculateVarMit() {
     const nVal = parseInt(document.getElementById('varMit_n').value);
@@ -161,6 +164,7 @@
     }
     document.getElementById('varMitModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('varMitModal_result').classList.remove('hidden');
+    showConfidenceMeter('varMitModal', nVal, kVal, result);
   }
   function calculatePermOhne() {
     const nVal = parseInt(document.getElementById('permOhne_n').value);
@@ -172,6 +176,7 @@
     }
     document.getElementById('permOhneModal_result_value').textContent = "Ergebnis: " + result;
     document.getElementById('permOhneModal_result').classList.remove('hidden');
+    showConfidenceMeter('permOhneModal', nVal, 0, result);
   }
 
   function addProbabilityInput() {
@@ -276,6 +281,90 @@
     if (panicModal) {
       panicModal.remove();
     }
+  }
+
+  // Confidence Meter Feature
+  function showConfidenceMeter(modalId, n, k, result) {
+    if (result === "Ungültige Eingabe.") {
+      return;
+    }
+
+    const confidenceMessages = [
+      {
+        min: 0,
+        max: 20,
+        message: "Hmm... vielleicht doch nochmal nachschauen? 🤔",
+        color: "bg-red-500"
+      },
+      {
+        min: 21,
+        max: 40,
+        message: "Immerhin besser als raten! 🎲",
+        color: "bg-orange-500"
+      },
+      {
+        min: 41,
+        max: 60,
+        message: "Nicht schlecht! Aber auch nicht gut 😅",
+        color: "bg-yellow-500"
+      },
+      {
+        min: 61,
+        max: 80,
+        message: "Das sieht doch schon gut aus! 🎯",
+        color: "bg-green-500"
+      },
+      {
+        min: 81,
+        max: 100,
+        message: "Wow! Bist du ein Mathe-Genie? 🧠",
+        color: "bg-blue-500"
+      }
+    ];
+
+    // Calculate a "confidence score" based on various factors
+    let confidenceScore = 0;
+    
+    // Factor 1: Input size (30% of score)
+    if (n > 0 && n < 10) confidenceScore += 30;
+    else if (n >= 10 && n < 20) confidenceScore += 20;
+    else if (n >= 20) confidenceScore += 10;
+    
+    // Factor 2: k value (30% of score)
+    if (k > 0 && k <= n) confidenceScore += 30;
+    else if (k > n) confidenceScore += 10;
+    
+    // Factor 3: Result size (40% of score)
+    if (result < 100) confidenceScore += 40;
+    else if (result < 1000) confidenceScore += 30;
+    else if (result < 10000) confidenceScore += 20;
+    else confidenceScore += 10;
+
+    // Get the appropriate message based on the confidence score
+    const message = confidenceMessages.find(m => confidenceScore >= m.min && confidenceScore <= m.max);
+    
+    // Create and insert the confidence meter HTML
+    const confidenceHTML = `
+      <div id="${modalId}_confidence" class="mt-4 p-3 bg-gray-700 rounded">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium">Konfidenz:</span>
+          <div class="w-32 h-2 bg-gray-600 rounded-full overflow-hidden">
+            <div class="h-full ${message.color} transition-all duration-500" style="width: ${confidenceScore}%"></div>
+          </div>
+        </div>
+        <p class="text-sm text-gray-300">${message.message}</p>
+      </div>
+    `;
+
+    // Remove existing confidence meter if any
+    const existingMeter = document.getElementById(`${modalId}_confidence`);
+    if (existingMeter) {
+      existingMeter.remove();
+    }
+
+    // Add the new confidence meter
+    const resultDiv = document.getElementById(`${modalId}_result`);
+    resultDiv.insertAdjacentHTML('afterend', confidenceHTML);
   }
 </script>
 {% endblock %}
