@@ -13,11 +13,17 @@
 </style>
 <form method="post" class="space-y-6">
     <!-- Checkbox: Alle Ereignisse identisch? -->
-    <div>
+    <div class="flex items-center space-x-4">
       <label class="inline-flex items-center">
         <input class="form-checkbox h-5 w-5 text-blue-600" type="checkbox" name="identical" value="yes" id="identicalCheck">
         <span class="ml-2">Alle Ereignisse identisch?</span>
       </label>
+      <div id="identicalCountContainer" class="hidden">
+        <label class="inline-flex items-center">
+          <span class="mr-2">Anzahl der Ereignisse:</span>
+          <input type="number" name="identicalCount" id="identicalCount" class="border border-gray-300 dark:border-gray-600 rounded p-2 bg-white dark:bg-gray-700" min="1" value="1">
+        </label>
+      </div>
     </div>
     <input type="hidden" name="eventCount" id="eventCount" value="1">
     <div id="eventsContainer">
@@ -186,7 +192,12 @@ function reindexStates(eventIndex) {
 document.getElementById("identicalCheck").addEventListener("change", function() {
     let eventsContainer = document.getElementById("eventsContainer");
     let eventCards = eventsContainer.querySelectorAll('.event-card');
+    let identicalCountContainer = document.getElementById("identicalCountContainer");
+    
     if(this.checked) {
+         // Show the identical count input
+         identicalCountContainer.classList.remove("hidden");
+         
          // Only show the first event card
          eventCards.forEach(function(card, index) {
               if(index > 0) {
@@ -194,11 +205,28 @@ document.getElementById("identicalCheck").addEventListener("change", function() 
               }
          });
          document.getElementById("addEventBtn").disabled = true;
+         
+         // Set event count to the identical count value
+         document.getElementById("eventCount").value = document.getElementById("identicalCount").value;
     } else {
+         // Hide the identical count input
+         identicalCountContainer.classList.add("hidden");
+         
+         // Show all event cards
          eventCards.forEach(function(card, index) {
               card.style.display = "";
          });
          document.getElementById("addEventBtn").disabled = false;
+         
+         // Set event count to the actual number of event cards
+         document.getElementById("eventCount").value = eventCards.length;
+    }
+});
+
+// Add event listener for the identicalCount input
+document.getElementById("identicalCount").addEventListener("input", function() {
+    if(document.getElementById("identicalCheck").checked) {
+        document.getElementById("eventCount").value = this.value;
     }
 });
 </script>
