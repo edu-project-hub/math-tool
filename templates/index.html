@@ -2,6 +2,7 @@
 {% import "partials/_modal.html" as modal %}
 {% block title %}Mathe-Tools{% endblock %}
 {% block content %}
+
 <section class="mt-8 p-4 bg-gray-800 rounded shadow">
   <h2 class="text-2xl font-bold mb-4">Kombinatorische Formeln</h2>
   <p class="mb-2">Findet eine Auswahl statt?</p>
@@ -78,6 +79,13 @@
     </div>
   </div>
 </section>
+
+<!-- Subtle Panic Button Easter Egg -->
+<div class="mt-12 flex justify-end opacity-50 hover:opacity-100 transition-opacity">
+  <button id="panicButton" class="text-xs text-gray-500 hover:text-red-500" onclick="openPanicModal()">
+    Hilfe?
+  </button>
+</div>
 
 <!-- Include the modals partial -->
 {% include "partials/modals.html" %}
@@ -215,6 +223,59 @@
         closeModal(modal.id);
       }
     });
+  }
+
+  // Panic Modal Easter Egg
+  function openPanicModal() {
+    const panicMessages = [
+      "Es ist zu spät zum Lernen! Jetzt hilft nur noch Beten oder ein Wunder! 🙏",
+      "Keine Panik auf der Titanic... obwohl, die ist gesunken. Genau wie deine Mathenote? 😱",
+      "Wenn du diesen Knopf drückst, hast du die Aufgabe wahrscheinlich nicht verstanden. Willkommen im Club! 🎉",
+      "Ohne Formel kein Keks! Und ohne Verständnis keine gute Note! 🍪",
+      "Falls du hier klickst, um Zeit zu schinden: Clever! Aber leider tickt die Uhr weiter! ⏰",
+      "Panikmodus aktiviert: Schwitzen, Zittern und zufällige Antworten generieren! 💦"
+    ];
+    
+    const randomMessage = panicMessages[Math.floor(Math.random() * panicMessages.length)];
+    
+    const modalHTML = `
+    <div id="panicModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full border-2 border-red-500">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-red-500">⚠️ PANIK MODUS ⚠️</h3>
+          <button onclick="closePanicModal()" class="text-gray-400 hover:text-gray-200 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="mb-4">
+          <p class="text-lg text-center text-white mb-4">${randomMessage}</p>
+          <div class="flex justify-center">
+            <button onclick="closePanicModal()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+              Tief durchatmen
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+    
+    // Remove existing panic modal if any
+    const existingModal = document.getElementById('panicModal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+    
+    // Add the modal to the DOM
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  }
+  
+  function closePanicModal() {
+    const panicModal = document.getElementById('panicModal');
+    if (panicModal) {
+      panicModal.remove();
+    }
   }
 </script>
 {% endblock %}
