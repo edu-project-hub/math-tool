@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template
 from graphviz import Digraph
-from math_utils import factorial, binom_coeff
+from fractions import Fraction
 
 tree_bp = Blueprint('tree', __name__, url_prefix='/tree')
 
@@ -29,9 +29,11 @@ def tree():
         for raw_states in all_events:
             sum_vals = sum(v for (_, v) in raw_states)
             if sum_vals == 0:
-                prob_states = [(n, 1.0/len(raw_states)) for (n, v) in raw_states] if raw_states else []
-            else:
-                prob_states = [(n, v/sum_vals) for (n, v) in raw_states]
+                prob_states = [(n, Fraction(1, len(raw_states))) for (n, v) in raw_states] if raw_states else []
+            else:                prob_states = [
+                    (n, Fraction(v).limit_denominator() / Fraction(sum_vals).limit_denominator())
+                    for (n, v) in raw_states
+                ]
             events.append(prob_states)
 
         dot, combos = build_probability_tree(events)
@@ -44,15 +46,15 @@ def tree():
 def build_probability_tree(events):
     dot = Digraph(comment="Wahrscheinlichkeitsbaum")
     dot.node("root", label="Start")
-    current_level = [("root", "", 1.0)]
+    current_level = [("root", "", Fraction(1))]
     for event_index, states in enumerate(events):
         next_level = []
         for (parent_node_id, path_label, parent_prob) in current_level:
             for state_index, (state_name, state_prob) in enumerate(states):
                 new_node_id = f"e{event_index}_s{state_index}_{parent_node_id}"
                 new_prob = parent_prob * state_prob
-                edge_label = f"{state_name} (p={state_prob:.3f})"
-                new_node_label = f"{path_label}{state_name}\\nGesamt p={new_prob:.4f}"
+                edge_label = f"{state_name} (p={float(state_prob):.6f} = {state_prob})"
+                new_node_label = f"{path_label}{state_name}\\nGesamt p={float(new_prob):.6f} = {new_prob}"
                 dot.node(new_node_id, label=new_node_label)
                 dot.edge(parent_node_id, new_node_id, label=edge_label)
                 next_level.append((new_node_id, path_label + state_name + ", ", new_prob))
@@ -61,5 +63,5 @@ def build_probability_tree(events):
     for (node_id, path_label, prob) in current_level:
         states_str = path_label.strip().rstrip(",")
         combo_tuple = tuple(s.strip() for s in states_str.split(",")) if states_str else ()
-        combinations.append((combo_tuple, prob))
+        combinations.append((combo_tuple, float(prob)))
     return dot, combinations
