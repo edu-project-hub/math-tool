@@ -25,6 +25,13 @@
         </label>
       </div>
     </div>
+    <!-- New Checkbox: Ohne Wiederholung (visible only if identical events) -->
+    <div id="withoutReplacementContainer" class="hidden mt-2">
+      <label class="inline-flex items-center">
+        <input class="form-checkbox h-5 w-5 text-blue-600" type="checkbox" name="withoutReplacement" value="yes" id="withoutReplacementCheck">
+        <span class="ml-2">Ohne Wiederholung</span>
+      </label>
+    </div>
     <input type="hidden" name="eventCount" id="eventCount" value="1">
     <div id="eventsContainer">
       <div class="bg-white dark:bg-gray-800 shadow rounded p-4 mb-4 event-card" id="event_0">
@@ -193,10 +200,12 @@ document.getElementById("identicalCheck").addEventListener("change", function() 
     let eventsContainer = document.getElementById("eventsContainer");
     let eventCards = eventsContainer.querySelectorAll('.event-card');
     let identicalCountContainer = document.getElementById("identicalCountContainer");
+    let withoutReplacementContainer = document.getElementById("withoutReplacementContainer");
     
     if(this.checked) {
-         // Show the identical count input
+         // Show the identical count input and withoutReplacement checkbox
          identicalCountContainer.classList.remove("hidden");
+         withoutReplacementContainer.classList.remove("hidden");
          
          // Only show the first event card
          eventCards.forEach(function(card, index) {
@@ -209,8 +218,9 @@ document.getElementById("identicalCheck").addEventListener("change", function() 
          // Set event count to the identical count value
          document.getElementById("eventCount").value = document.getElementById("identicalCount").value;
     } else {
-         // Hide the identical count input
+         // Hide the identical count input and withoutReplacement checkbox
          identicalCountContainer.classList.add("hidden");
+         withoutReplacementContainer.classList.add("hidden");
          
          // Show all event cards
          eventCards.forEach(function(card, index) {
